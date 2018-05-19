@@ -1,0 +1,59 @@
+<html>
+<head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+	<div id="root">
+		<h1>Desafio Vue</h1>
+		<h2>Lista de Times</h2>
+		<app-lista v-bind:tipos="times"></app-lista>
+		<br><br><br>
+		<h2>Lista de Jogadores</h2>
+		<app-lista v-bind:tipos="jogadores"></app-lista>
+	</div>	
+
+	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+	<script>
+		Vue.component('app-lista', {
+			data: function () {
+	    		return {
+	      			seen: false,
+	      			novoTipo: '',
+					editTipo: '',
+					indexEdit: '',
+	    		}
+  			},
+			props: ['tipos'],
+			template: '<div><ul><li v-for="(tipo, index) in tipos">{{tipo}}<button @click="showEdit(index)">Editar</button><button @click="remover(index)">Remover</button></li></ul><input v-if="seen" type="text" v-model="editTipo"><button v-if="seen" @click="editar">Editar</button><br><br><input id="input" type="text" v-model="novoTipo"><button @click="adicionar">Adicionar </button></div>',
+			methods: {
+				adicionar(){
+					this.tipos.push(this.novoTipo)
+				},
+				remover(index){
+					this.tipos.splice(index, 1)
+				},
+				showEdit(index){
+					this.seen = !this.seen
+					this.indexEdit = index
+				},
+				editar(){
+					this.$set(this.tipos, this.indexEdit, this.editTipo)
+					this.seen = false
+				}
+			}
+		})
+
+		new Vue({
+			el: '#root',
+			data: function () {
+				return{
+					times: ['Santos', 'Palmeiras'],
+					jogadores: ['Neymar', 'Hulk'],
+					seen: false
+				}
+			},
+			
+		})
+	</script>
+</body>
+</html>
